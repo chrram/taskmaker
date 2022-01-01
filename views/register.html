@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>
+            Login
+        </title>
+            <!-- Compiled and minified CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h4>Register</h4>
+            <br />
+            <div class="row">
+            
+                <form method="post" action="../index.php" class="col s12">
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <input id="email" type="email" name="register_email" class="validate">
+                            <label for="email">Email</label>
+                        </div>
+                        
+                        <div class="input-field col s3">
+                            <input id="password" type="password" name="register_password" class="validate">
+                            <label for="password">Password</label>
+                        </div>
+                        
+                    </div>
+
+                    <button class="waves-effect waves-light btn pulse" type="submit" name="action"> Register </button>
+                    <br />
+                    <br />
+                    <div class="divider"> </div>
+                    <br />
+                    <a href="login.php">Already have an account? Login!</a>
+                </form>
+
+            </div>
+        </div>
+    </body>
+</html>
