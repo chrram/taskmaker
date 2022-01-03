@@ -13,6 +13,14 @@
             <?php
             session_start();
 
+            if (@$_GET['delete']=='yes'){
+                echo " You deleted your account!! ";
+                echo "<h4> Goodbye !</h4>";
+                session_destroy();
+                header('Refresh: 2; url=../index.php');
+                exit;
+            }
+
             echo "<h4> Goodbye !</h4>";
             echo "<p>See you again soon!</p>";
             session_destroy();

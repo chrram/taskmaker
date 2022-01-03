@@ -4,6 +4,8 @@
     
     session_start();
 
+
+    //REGISTRATION OF AN ACCOUNT
     if(!empty($_POST["register_password"]) && !empty($_POST["register_email"])){
 
         $email = $_POST["register_email"];
@@ -22,6 +24,7 @@
         exit;
     }
 
+    //LOGIN OF AN ACCOUNT
     if(!empty($_POST["login_email"]) && !empty($_POST["login_password"])){
 
         $email = $_POST["login_email"];
@@ -40,9 +43,24 @@
                 break;
         }
         exit;
-
     }
 
+    // DELETION OF A USER ACCOUNT
+    if(!empty($_POST['delete_account'])){
+
+        $result = delete_user();
+        switch($result){
+            case 200:
+                header("HTTP/1.1 200 OK");
+                break;
+            default:
+                header("HTTP/1.1 500 OK");
+                break;
+        }
+        exit;
+    }
+
+    //IF WE ARE NOT LOGGED IN
     if(empty($_SESSION['user_email'])) {
         header("Location: views/login.php");
     }

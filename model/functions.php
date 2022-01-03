@@ -42,4 +42,45 @@
             return 500;
         }
     }
+
+    function delete_user() {
+        
+        global $pdo;
+
+        try{
+            $sql = 'DELETE FROM users WHERE email = (?)';
+            $statement = $pdo->prepare($sql);
+            $statement->execute([$_SESSION['user_email']]);
+            return 200;
+            
+        }
+        catch (PDOException $error) {
+            return 500;
+        }
+    }
+
+    function getTasks() {
+        
+        global $pdo;
+
+        try{
+            $sql = '';
+        }
+        catch (PDOException $error) {
+            return 500;
+        }
+    }
+
+    function createTask() {
+        
+        global $pdo;
+
+        try{
+            $sql = 'INSERT INTO ';
+        }
+        catch (PDOException $error) {
+            return 500;
+        }
+    }
+
 ?>

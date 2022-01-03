@@ -22,12 +22,12 @@ if (empty($_SESSION['user_email']))
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
-        
-            
+         
         <nav>
             <div class="nav-wrapper blue darken-1">
             <a href="#!" class="brand-logo">Taskmaker</a>
             <ul class="right hide-on-med-and-down">
+                <li><a href="options.php">Account Options</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
             </div>
