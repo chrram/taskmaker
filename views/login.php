@@ -61,7 +61,7 @@
 
                     ?>
 
-                    <button class="waves-effect waves-light btn pulse" type="submit" name="action">Login</button>
+                    <button class="waves-effect waves-light btn pulse blue darken-1" type="submit" name="action">Login</button>
                     <br />
                     <br />
                     <div class="divider"> </div>
