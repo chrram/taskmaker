@@ -12,7 +12,7 @@
             <h4>Register</h4>
             <br />
             <div class="row">
-            
+                
                 <form method="post" action="../index.php" class="col s12">
                     <div class="row">
                         <div class="input-field col s3">
@@ -24,8 +24,35 @@
                             <input id="password" type="password" name="register_password" class="validate">
                             <label for="password">Password</label>
                         </div>
-                        
                     </div>
+
+                    <?php
+                    session_start();
+
+                    if (@$_GET['action']=='failure'){
+                        
+                        if(isset($_SESSION["registrationError"])) {
+                            $registrationError = $_SESSION['registrationError'];
+                            unset($_SESSION['registrationError']);
+                        } else {
+                            $registrationError = "";
+                        }
+
+                        echo 
+                        '<div class="row">
+                            <div class="col s12 m6">
+                                <div class="card blue-grey red accent-3">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">Database error</span>
+                                        <p>'.$registrationError.'</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                        
+                    }
+                    ?>
+            
 
                     <button class="waves-effect waves-light btn pulse" type="submit" name="action"> Register </button>
                     <br />
