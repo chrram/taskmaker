@@ -3,7 +3,7 @@
 session_start();
 
 //IF THE USER IS NOT LOGGED IN, BUT TRYING TO ACCESS THE SITE.
-if (empty($_SESSION['user_email']))
+if (empty($_SESSION['user']))
 {
     echo "Not logged in";
     header('Refresh: 1; url=../index.php');
@@ -23,18 +23,18 @@ if (empty($_SESSION['user_email']))
     </head>
     <body>
          
-        <nav>
-            <div class="nav-wrapper blue darken-1">
-            <a href="#!" class="brand-logo">Taskmaker</a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-            </div>
-        </nav>
+        <?php
+            require "./components/navbar.php";
+        ?>
 
         <div class="container">
             <h4 id="header">Options</h4>
             <br />
+
+            
+            <p>User information</p>
+            <p>Account email: <?php echo $_SESSION['user']['email']; ?> </p>
+            <p>Account created at: <?php echo $_SESSION['user']['created_at']; ?> </p>
             <button data-target="modal1" class="btn modal-trigger red accent-3">Delete account</button>
             </div>
         </div>
@@ -54,37 +54,36 @@ if (empty($_SESSION['user_email']))
         <script>
             (() => {
 
-                document.addEventListener('DOMContentLoaded', function() {
+                const deleteAccount = () => {
+                    const xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function() {
+                    console.log(this.readyState, this.status, "ready state")
 
-                    var elems = document.querySelectorAll('.modal');
-                    var instances = M.Modal.init(elems);
-                    
-                    const deleteAccount = () => {
+                    if(this.readyState <= 4){
+                        //Todo: Improve this and make it clearer.
+                        document.getElementById("header").innerHTML = "<h4 style='font-weight:bold;'>Loading...</h4>";
+                    }
 
-                        const xmlhttp = new XMLHttpRequest();
-                        xmlhttp.onreadystatechange = function() {
-                        console.log(this.readyState, this.status, "ready state")
+                    if (this.readyState == 4 && this.status == 200) {   
+                        window.location.href = "logout.php?delete=yes";
+                    }
 
-                        if(this.readyState <= 4){
-                            //Todo: Improve this and make it clearer.
-                            document.getElementById("header").innerHTML = "<h4 style='font-weight:bold;'>Loading...</h4>";
-                        }
-
-                        if (this.readyState == 4 && this.status == 200) {   
-                            window.location.href = "logout.php?delete=yes";
-                        }
-
-                        else if (this.readyState == 4 && this.status == 500) {
-                            //Todo: Improve this and make it clearer.
-                            document.getElementById("header").innerHTML = "<h4 id='header' style='font-weight:bold;color:red;'>DATABASE FAILURE, CONTACT ADMIN</h4>";
-                        }
+                    else if (this.readyState == 4 && this.status == 500) {
+                        //Todo: Improve this and make it clearer.
+                        document.getElementById("header").innerHTML = "<h4 id='header' style='font-weight:bold;color:red;'>DATABASE FAILURE, CONTACT ADMIN</h4>";
+                    }
 
                     }
                     const vars = "delete_account=true";
                     xmlhttp.open("POST", "../index.php", true);
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send(vars);
-                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    var elems = document.querySelectorAll('.modal');
+                    var instances = M.Modal.init(elems);
 
                     document.getElementById('confirmDelete').onclick = () => {
                         deleteAccount();

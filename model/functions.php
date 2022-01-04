@@ -14,7 +14,7 @@
             
             //COMPARING THE PASSWORDS
             if(password_verify($pwd, $user['password'])){
-                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user'] = $user;
                 return 200;
             }
             return 401;
@@ -50,7 +50,7 @@
         try{
             $sql = 'DELETE FROM users WHERE email = (?)';
             $statement = $pdo->prepare($sql);
-            $statement->execute([$_SESSION['user_email']]);
+            $statement->execute([$_SESSION['user']['email']]);
             return 200;
             
         }
@@ -59,24 +59,32 @@
         }
     }
 
-    function getTasks() {
+    function getUserTasks() {
         
         global $pdo;
 
         try{
-            $sql = '';
+            $sql = 'SELECT * FROM tasks WHERE userId = (?)';
+            $statement = $pdo->prepare($sql);
+            $statement->execute([$_SESSION['user']['id']]);
+            $tasks = $statement->fetchAll();
+
+            $_SESSION['user_tasks'] = $tasks;
+            return 200;
         }
         catch (PDOException $error) {
             return 500;
         }
     }
 
-    function createTask() {
+    function createTask($userId, $title, $description) {
         
         global $pdo;
-
         try{
-            $sql = 'INSERT INTO ';
+            $sql = 'INSERT INTO tasks (userId, title, description) VALUES (?,?,?)';
+            $statement = $pdo->prepare($sql);
+            $statement->execute([$userId, $title, $description]);
+            return 201;
         }
         catch (PDOException $error) {
             return 500;

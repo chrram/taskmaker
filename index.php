@@ -3,8 +3,7 @@
     include "./model/functions.php";
     
     session_start();
-
-
+    
     //REGISTRATION OF AN ACCOUNT
     if(!empty($_POST["register_password"]) && !empty($_POST["register_email"])){
 
@@ -45,6 +44,27 @@
         exit;
     }
 
+    if(!empty($_POST['task_title']) && !empty($_POST['task_description'])){
+        
+        //NEEDS TO BE SANITIZED
+        $userId = $_SESSION['user']['id'];
+        $title = $_POST['task_title'];
+        $description = $_POST['task_description'];
+        
+        $result = createTask($userId, $title, $description);
+        switch($result){
+            case 201:
+                header("HTTP/1.1 501 OK");
+                header('Refresh: 0; url=./views/home.php');
+                break;
+            default:
+                header("HTTP/1.1 500 OK");
+                header('Refresh: 0; url=./views/createTask.php?action=failure');
+                break;
+        }
+        exit;
+    }
+
     // DELETION OF A USER ACCOUNT
     if(!empty($_POST['delete_account'])){
 
@@ -60,13 +80,28 @@
         exit;
     }
 
+    if(!empty($_GET['getTasks'])){
+        
+        $result = getUserTasks();
+        switch($result){
+            case 200:
+                header("HTTP/1.1 200 OK");
+                include "./views/components/tasks.php";
+                break;
+            default:
+                header("HTTP/1.1 500 OK");
+                break;
+        }
+        exit;
+        
+    }
+
     //IF WE ARE NOT LOGGED IN
-    if(empty($_SESSION['user_email'])) {
+    if(empty($_SESSION['user'])) {
         header("Location: views/login.php");
     }
     else{
-        echo "Logging you in!";
-        header('Refresh: 2; url=./views/home.php');
+        header('Refresh: 0; url=./views/home.php');
         exit;
     }
 
