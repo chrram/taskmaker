@@ -33,6 +33,22 @@ if (empty($_SESSION['user']))
             <?php
                 echo "Welcome user: ".$_SESSION['user']['email'];
             ?>
+
+            <?php
+                    if (@$_GET['action']=='failure'){
+                        echo 
+                        '<div class="row">
+                            <div class="col s12 m6">
+                                <div class="card blue-grey red accent-3">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">Database error</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                    }
+            ?>
+
             <br />
             <a href="createTask.php"class="btn modal-trigger blue darken-1">Create task</a>
             <div id="tasks">
@@ -63,6 +79,11 @@ if (empty($_SESSION['user']))
                             var elems = document.querySelectorAll('.collapsible');
                             var instances = M.Collapsible.init(elems);
 
+                            document.querySelectorAll('.collapsible-body button').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    // WHEN THE USER CLICKS THE DELETE BUTTON, SOMETHING SHOULD HAPPEN
+                                })
+                            })
                         }
 
                         else if (this.readyState == 4 && this.status == 500) {
@@ -79,7 +100,8 @@ if (empty($_SESSION['user']))
                 document.addEventListener('DOMContentLoaded', function() {
                     getTasks();
                 });
-                    
+
+                
             })();
         </script>
 

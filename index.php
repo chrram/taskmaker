@@ -54,7 +54,7 @@
         $result = createTask($userId, $title, $description);
         switch($result){
             case 201:
-                header("HTTP/1.1 501 OK");
+                header("HTTP/1.1 201 OK");
                 header('Refresh: 0; url=./views/home.php');
                 break;
             default:
@@ -80,6 +80,28 @@
         exit;
     }
 
+
+    // THIS ONE NEEDS TO BE TESTED EXTENSIVLY
+    if(!empty($_POST['delete_task'])){
+
+        $userId = $_SESSION['user']['id'];
+        //NEEDS TO BE FURTHER CHECKED
+        $task = htmlspecialchars($_POST['delete_task'], ENT_QUOTES);
+
+        $result = deleteTask($userId, $task);
+        switch($result){
+            case 200:
+                header("HTTP/1.1 200 OK");
+                header('Refresh: 0; url=./views/home.php');
+                break;
+            default:
+                header("HTTP/1.1 500 OK");
+                header('Refresh: 0; url=./views/home.php?action=failure');
+                break;
+        }
+        exit;
+    }
+
     if(!empty($_GET['getTasks'])){
         
         $result = getUserTasks();
@@ -93,7 +115,6 @@
                 break;
         }
         exit;
-        
     }
 
     //IF WE ARE NOT LOGGED IN

@@ -77,6 +77,44 @@
         }
     }
 
+    function deleteTask($userId, $taskId){
+
+        global $pdo;
+
+        try{
+            $sql = 'SELECT * FROM tasks WHERE userId = (?) AND id = (?)';
+            $statement = $pdo->prepare($sql);
+            $statement->execute([$userId, $taskId]);
+
+            $result = $statement->fetch();
+            
+            //IF THE RESULT IS EMPTY
+            if(empty($result)) {
+                return 500;
+            }
+            else {
+                
+                if($result['deleted'] == 0){
+                    //SHOULD BE UPDATED TO 1
+                    $sql = 'UPDATE tasks SET deleted = 1 WHERE id = (?)';
+                    $statement = $pdo->prepare($sql);
+                    $statement->execute([$taskId]);
+
+                } else {
+                    // SHOULD BE DELETED FROM DATABASE
+                    $sql = 'DELETE FROM tasks WHERE id = (?)';
+                    $statement = $pdo->prepare($sql);
+                    $statement->execute([$taskId]);
+                }
+                return 200;
+            }
+        }
+        catch (PDOException $error) {
+            return 500;
+        }
+
+    }
+
     function createTask($userId, $title, $description) {
         
         global $pdo;
