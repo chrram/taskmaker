@@ -64,11 +64,25 @@
         global $pdo;
 
         try{
-            $sql = 'SELECT * FROM tasks WHERE userId = (?)';
+            $sql = 'SELECT id, title, description, deleted FROM tasks WHERE userId = (?)';
+            $sql2 = 'select count(id) as active_tasks from tasks WHERE userId = (?) AND deleted != 1';
+            $sql3 = 'select count(id) as deleted_tasks from tasks WHERE userId = (?) AND deleted';
+
             $statement = $pdo->prepare($sql);
             $statement->execute([$_SESSION['user']['id']]);
-            $tasks = $statement->fetchAll();
 
+            $statement2 = $pdo->prepare($sql2);
+            $statement2->execute([$_SESSION['user']['id']]);
+
+            $statement3 = $pdo->prepare($sql3);
+            $statement3->execute([$_SESSION['user']['id']]);
+            
+            $tasks = $statement->fetchAll();
+            $amountOf = $statement2->fetch();
+            $amountOfDeleted = $statement3->fetch();
+
+            $_SESSION['amount_active_tasks'] = $amountOf;
+            $_SESSION['amount_deleted_tasks'] = $amountOfDeleted;
             $_SESSION['user_tasks'] = $tasks;
             return 200;
         }
@@ -99,12 +113,16 @@
                     $sql = 'UPDATE tasks SET deleted = 1 WHERE id = (?)';
                     $statement = $pdo->prepare($sql);
                     $statement->execute([$taskId]);
-
+                    
+                    $_SESSION['user_tab'] = "active";
                 } else {
                     // SHOULD BE DELETED FROM DATABASE
                     $sql = 'DELETE FROM tasks WHERE id = (?)';
                     $statement = $pdo->prepare($sql);
                     $statement->execute([$taskId]);
+
+                    // TO PUT US ON THE RIGHT TAB, WHEN DELETING
+                    $_SESSION['user_tab'] = "deleted";
                 }
                 return 200;
             }

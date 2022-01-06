@@ -69,21 +69,42 @@ if (empty($_SESSION['user']))
                         console.log(this.readyState, this.status, "ready state")
 
                         if(this.readyState <= 4){
+
+                            //LOADING CIRCLE
+                            const loadingElement = `
+                            <div class="center-align">
+                                <div class="preloader-wrapper big active">
+                                    <div class="spinner-layer spinner-blue-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div>
+                            `
                             //Todo: Improve this and make it clearer.
-                            document.getElementById("tasks").innerHTML = "<h4 style='font-weight:bold;'>Loading...</h4>";
+                            document.getElementById("tasks").innerHTML = loadingElement;
                         }
 
                         if (this.readyState == 4 && this.status == 200) {   
                             document.getElementById("tasks").innerHTML = this.responseText;
 
-                            var elems = document.querySelectorAll('.collapsible');
-                            var instances = M.Collapsible.init(elems);
+                            const el = document.querySelectorAll('.tabs');
+                             const instance = M.Tabs.init(el);
+                            const collapsibleElements = document.querySelectorAll('.collapsible');
+                            const instances = M.Collapsible.init(collapsibleElements);
 
-                            document.querySelectorAll('.collapsible-body button').forEach(item => {
-                                item.addEventListener('click', event => {
-                                    // WHEN THE USER CLICKS THE DELETE BUTTON, SOMETHING SHOULD HAPPEN
-                                })
-                            })
+                            // document.querySelectorAll('.collapsible-body button').forEach(item => {
+                            //     item.addEventListener('click', event => {
+                            //         // WHEN THE USER CLICKS THE DELETE BUTTON, SOMETHING SHOULD HAPPEN
+                            //     })
+                            // })
                         }
 
                         else if (this.readyState == 4 && this.status == 500) {

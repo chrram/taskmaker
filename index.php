@@ -46,10 +46,10 @@
 
     if(!empty($_POST['task_title']) && !empty($_POST['task_description'])){
         
-        //NEEDS TO BE SANITIZED
+        //NEEDS TO BE SANITIZED & TESTED
         $userId = $_SESSION['user']['id'];
-        $title = $_POST['task_title'];
-        $description = $_POST['task_description'];
+        $title = htmlspecialchars($_POST['task_title'], ENT_QUOTES);
+        $description = htmlspecialchars($_POST['task_description'], ENT_QUOTES);
         
         $result = createTask($userId, $title, $description);
         switch($result){
