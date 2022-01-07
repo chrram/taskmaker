@@ -64,9 +64,10 @@
         global $pdo;
 
         try{
-            $sql = 'SELECT id, title, description, deleted FROM tasks WHERE userId = (?)';
-            $sql2 = 'select count(id) as active_tasks from tasks WHERE userId = (?) AND deleted != 1';
+            $sql = 'SELECT id, title, description, deleted, completed FROM tasks WHERE userId = (?)';
+            $sql2 = 'select count(id) as active_tasks from tasks WHERE userId = (?) AND deleted != 1 AND completed != 1';
             $sql3 = 'select count(id) as deleted_tasks from tasks WHERE userId = (?) AND deleted';
+            $sql4 = 'select count(id) as completed_tasks from tasks WHERE userId = (?) AND completed';
 
             $statement = $pdo->prepare($sql);
             $statement->execute([$_SESSION['user']['id']]);
@@ -76,13 +77,18 @@
 
             $statement3 = $pdo->prepare($sql3);
             $statement3->execute([$_SESSION['user']['id']]);
+
+            $statement4 = $pdo->prepare($sql4);
+            $statement4->execute([$_SESSION['user']['id']]);
             
             $tasks = $statement->fetchAll();
             $amountOf = $statement2->fetch();
             $amountOfDeleted = $statement3->fetch();
+            $amountOfCompleted = $statement4->fetch();
 
             $_SESSION['amount_active_tasks'] = $amountOf;
             $_SESSION['amount_deleted_tasks'] = $amountOfDeleted;
+            $_SESSION['amount_completed_tasks'] = $amountOfCompleted;
             $_SESSION['user_tasks'] = $tasks;
             return 200;
         }
@@ -121,7 +127,7 @@
                     $statement = $pdo->prepare($sql);
                     $statement->execute([$taskId]);
 
-                    // TO PUT US ON THE RIGHT TAB, WHEN DELETING
+                    // TODO : TO PUT US ON THE RIGHT TAB, WHEN DELETING
                     $_SESSION['user_tab'] = "deleted";
                 }
                 return 200;
@@ -133,9 +139,53 @@
 
     }
 
+    function completeTask($userId, $taskId){
+
+        global $pdo;
+
+        try{
+            $sql = 'SELECT * FROM tasks WHERE userId = (?) AND id = (?)';
+            $statement = $pdo->prepare($sql);
+            $statement->execute([$userId, $taskId]);
+
+            $result = $statement->fetch();
+            
+            //IF THE RESULT IS EMPTY
+            if(empty($result)) {
+                return 500;
+            }
+            else {
+                
+                if($result['completed'] == 0){
+
+                    $sql = 'UPDATE tasks SET completed = 1 WHERE id = (?)';
+                    $statement = $pdo->prepare($sql);
+                    $statement->execute([$taskId]);
+                    
+                    // $_SESSION['user_tab'] = "active";
+                } else {
+
+                    $sql = 'UPDATE tasks SET completed = 0 WHERE id = (?)';
+                    $statement = $pdo->prepare($sql);
+                    $statement->execute([$taskId]);
+
+                    // TODO : TO PUT US ON THE RIGHT TAB, WHEN DELETING
+                    // $_SESSION['user_tab'] = "deleted";
+                }
+                return 200;
+            }
+        }
+        catch (PDOException $error) {
+            return 500;
+        }
+
+    }
+
+
     function createTask($userId, $title, $description) {
         
         global $pdo;
+
         try{
             $sql = 'INSERT INTO tasks (userId, title, description) VALUES (?,?,?)';
             $statement = $pdo->prepare($sql);

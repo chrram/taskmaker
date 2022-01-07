@@ -102,6 +102,25 @@
         exit;
     }
 
+    if(!empty($_POST['complete_task'])){
+        $userId = $_SESSION['user']['id'];
+        //NEEDS TO BE FURTHER CHECKED
+        $task = htmlspecialchars($_POST['complete_task'], ENT_QUOTES);
+
+        $result = completeTask($userId, $task);
+        switch($result){
+            case 200:
+                header("HTTP/1.1 200 OK");
+                header('Refresh: 0; url=./views/home.php');
+                break;
+            default:
+                header("HTTP/1.1 500 OK");
+                header('Refresh: 0; url=./views/home.php?action=failure');
+                break;
+        }
+        exit;
+    }
+
     if(!empty($_GET['getTasks'])){
         
         $result = getUserTasks();

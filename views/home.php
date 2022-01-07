@@ -48,14 +48,16 @@ if (empty($_SESSION['user']))
                         </div>';
                     }
             ?>
-
             <br />
-            <a href="createTask.php"class="btn modal-trigger blue darken-1">Create task</a>
+            <br />
+            <a href="createTask.php"class="btn pulse modal-trigger blue darken-1">Create task</a>
+
+            <br /> 
+            <br />
+            <br />
+
             <div id="tasks">
-                <p>Total tasks:</p>
-                <p>In progress:</p>
-                <p>Deleted tasks:</p>
-                <p>Completed tasks:</p>
+                <p>Your tasks.<p>
             <div>
 
         </div>
