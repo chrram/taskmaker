@@ -31,7 +31,6 @@
                             <div class='collapsible-body ".$deleted."'>
                                 <span>".$tasks['description']."</span>
                                 <br />
-
                                 <br />
 
                                 <form style='display:inline-block;' method='post' action='../index.php'>

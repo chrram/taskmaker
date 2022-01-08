@@ -124,7 +124,6 @@ if (empty($_SESSION['user']))
                 document.addEventListener('DOMContentLoaded', function() {
                     getTasks();
                 });
-
                 
             })();
         </script>
