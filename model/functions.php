@@ -116,11 +116,17 @@
                 
                 if($result['deleted'] == 0){
                     //SHOULD BE UPDATED TO 1
-                    $sql = 'UPDATE tasks SET deleted = 1 WHERE id = (?)';
+                    $sql = 'UPDATE tasks SET deleted = 1, completed = 0 WHERE id = (?)';
                     $statement = $pdo->prepare($sql);
                     $statement->execute([$taskId]);
                     
-                    $_SESSION['user_tab'] = "active";
+                    if ($result['completed'] == 1) {
+                        $_SESSION['user_tab'] = "complete";
+                    }
+                    else {
+                        $_SESSION['user_tab'] = "active";
+                    }
+                    
                 } else {
                     // SHOULD BE DELETED FROM DATABASE
                     $sql = 'DELETE FROM tasks WHERE id = (?)';
@@ -128,7 +134,7 @@
                     $statement->execute([$taskId]);
 
                     // TODO : TO PUT US ON THE RIGHT TAB, WHEN DELETING
-                    $_SESSION['user_tab'] = "deleted";
+                    $_SESSION['user_tab'] = "delete";
                 }
                 return 200;
             }
@@ -170,7 +176,7 @@
                     $statement->execute([$taskId]);
 
                     // TODO : TO PUT US ON THE RIGHT TAB, WHEN DELETING
-                    // $_SESSION['user_tab'] = "deleted";
+                    $_SESSION['user_tab'] = "complete";
                 }
                 return 200;
             }
@@ -190,6 +196,7 @@
             $sql = 'INSERT INTO tasks (userId, title, description) VALUES (?,?,?)';
             $statement = $pdo->prepare($sql);
             $statement->execute([$userId, $title, $description]);
+            $_SESSION['user_tab'] = "active";
             return 201;
         }
         catch (PDOException $error) {

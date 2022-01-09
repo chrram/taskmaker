@@ -95,19 +95,15 @@ if (empty($_SESSION['user']))
                             document.getElementById("tasks").innerHTML = loadingElement;
                         }
 
-                        if (this.readyState == 4 && this.status == 200) {   
+                        if (this.readyState == 4 && this.status == 200) {
+                              
                             document.getElementById("tasks").innerHTML = this.responseText;
 
                             const el = document.querySelectorAll('.tabs');
-                             const instance = M.Tabs.init(el);
+                            const instance = M.Tabs.init(el);
                             const collapsibleElements = document.querySelectorAll('.collapsible');
                             const instances = M.Collapsible.init(collapsibleElements);
 
-                            // document.querySelectorAll('.collapsible-body button').forEach(item => {
-                            //     item.addEventListener('click', event => {
-                            //         // WHEN THE USER CLICKS THE DELETE BUTTON, SOMETHING SHOULD HAPPEN
-                            //     })
-                            // })
                         }
 
                         else if (this.readyState == 4 && this.status == 500) {
